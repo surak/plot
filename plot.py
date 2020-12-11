@@ -11,7 +11,8 @@ csvfile = './sim_time_resTol_1e-4_TSMP.csv'
 TSMP_sim_times = pd.read_csv(csvfile, infer_datetime_format=True, parse_dates=[[0, 1], 2])
 
 # Chooses only a subset of the data, because it would jump from 1965 to 1999
-data_year = TSMP_sim_times.query("year_month < 1970")
+data_year = TSMP_sim_times[
+    (TSMP_sim_times['year_month'] > '1999-01-01') & (TSMP_sim_times['year_month'] < '2000-01-01')]
 
 # 2 rows of plots, 1 column, 14 per 8 inches
 fig, ax = plt.subplots(figsize=(14, 8))
@@ -30,7 +31,9 @@ ax.set_xticklabels(TSMP_sim_times["year_month"], rotation=30, ha='right')
 # Format X as December 1965 for example.
 ax.xaxis.set_major_formatter(md.DateFormatter('%B %Y'))
 
+
 # Plot
 plot = sns.lineplot(ax=ax, data=data_year, x="year_month", y="sim_time", legend="full")
+plot.set(xlabel='Date\n ← Older  Newer  →', ylabel='Execution time')
 
 plt.show()
